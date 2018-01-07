@@ -7,9 +7,28 @@
     tools:context="com.kalenicz.maciej.newsguardian.MainActivity">
 
     <TextView
-        android:id="@+id/emailText"
+        android:id="@+id/section"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Hello World!" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Hello World!" />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Hello World!" />
+
+    <TextView
+        android:id="@+id/author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Hello World!" />
+
 
 </LinearLayout>

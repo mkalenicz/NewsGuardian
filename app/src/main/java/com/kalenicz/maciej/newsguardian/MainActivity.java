@@ -23,6 +23,7 @@ import java.nio.charset.Charset;
 public class MainActivity extends AppCompatActivity {
 
     public static final String API_URL = "http://content.guardianapis.com/search?";
+    public static final String API_SHOW_BYLINE = "show-fields=byline";
     public static final String API_KEY = "test";
 
     @Override
@@ -34,15 +35,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUi(News news) {
-        TextView titleTextView = findViewById(R.id.emailText);
-        titleTextView.setText(news.getSection());
+        TextView section = findViewById(R.id.section);
+        section.setText(news.getSection());
+
+        TextView title = findViewById(R.id.title);
+        title.setText(news.getHeadline());
+
+        TextView time = findViewById(R.id.time);
+        time.setText(news.getTimePublished());
+
+        TextView author = findViewById(R.id.author);
+        author.setText(news.getAuthor());
     }
 
     private class NewsAsyncTask extends AsyncTask<URL, Void, News> {
 
         @Override
         protected News doInBackground(URL... urls) {
-            URL url = createUrl(API_URL + "&api-key=" + API_KEY);
+            URL url = createUrl(API_URL + API_SHOW_BYLINE+"&api-key=" + API_KEY);
             String jsonResponse = "";
             try {
                 jsonResponse = makeHttpRequest(url);
@@ -120,16 +130,25 @@ public class MainActivity extends AppCompatActivity {
             JSONObject newsObject = baseJsonResponse.getJSONObject("response");
             JSONArray resultsArray = newsObject.getJSONArray("results");
 
-
             // If there are results in the features array
             if (resultsArray.length() > 0) {
                 // Extract out the first feature (which is an earthquake)
                 JSONObject currentNews = resultsArray.getJSONObject(0);
                 String section = currentNews.getString("sectionName");
-                return new News("test", "test", "test", "test", "test", section);
+                String headline = currentNews.getString("webTitle");
+                String time = currentNews.getString("webPublicationDate");
+
+                String author;
+                if(currentNews.getJSONObject("fields").has("byline")){
+                    author = "by " + currentNews.getJSONObject("fields").getString("byline");
+                } else {
+                    author = "no author";
+                }
+
+                return new News(headline, author, time, "test", "test", section);
             }
         } catch (JSONException e) {
-            Log.e("Error LOG", "Problem parsing the earthquake JSON results", e);
+            Log.e("Error LOG", "Problem parsing the JSON results", e);
         }
         return null;
     }
