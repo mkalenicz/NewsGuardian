@@ -35,6 +35,7 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
         holder.headline.setText(newsModel.get("headline"));
         holder.section.setText(newsModel.get("section"));
         holder.author.setText(newsModel.get("author"));
+        holder.description.setText(newsModel.get("description"));
     }
 
     @Override
@@ -47,12 +48,14 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
         final TextView headline;
         final TextView author;
         final TextView section;
+        final TextView description;
 
         NewsViewHolder(View listItem) {
             super(listItem);
             headline = listItem.findViewById(R.id.headline);
             author = listItem.findViewById(R.id.author);
             section = listItem.findViewById(R.id.section);
+            description = listItem.findViewById(R.id.description);
         }
     }
 }

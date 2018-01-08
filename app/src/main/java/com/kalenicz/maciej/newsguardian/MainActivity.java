@@ -28,7 +28,7 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity {
 
     public static final String API_URL = "http://content.guardianapis.com/search?";
-    public static final String API_SHOW_BYLINE = "show-fields=byline";
+    public static final String API_SHOW_BYLINE_TRAILTEXT = "show-fields=byline,trailText";
     public static final String API_KEY = "test";
     private RecyclerView.Adapter adapter;
     private RecyclerView recyclerView;
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            URL url = createUrl(API_URL + API_SHOW_BYLINE + "&api-key=" + API_KEY);
+            URL url = createUrl(API_URL + API_SHOW_BYLINE_TRAILTEXT + "&api-key=" + API_KEY);
             String jsonResponse = "";
             try {
                 jsonResponse = makeHttpRequest(url);
@@ -140,24 +140,27 @@ public class MainActivity extends AppCompatActivity {
             JSONObject newsObject = baseJsonResponse.getJSONObject("response");
             JSONArray resultsArray = newsObject.getJSONArray("results");
 
+
             for (int i = 0; i < resultsArray.length(); i++) {
 
                 JSONObject currentNews = resultsArray.getJSONObject(i);
                 String section = currentNews.getString("sectionName");
                 String headline = currentNews.getString("webTitle");
                 String time = currentNews.getString("webPublicationDate");
-
+                String description = currentNews.getJSONObject("fields").getString("trailText");
                 String author;
                 if (currentNews.getJSONObject("fields").has("byline")) {
                     author = "by " + currentNews.getJSONObject("fields").getString("byline");
                 } else {
                     author = "no author";
                 }
+
                 HashMap<String, String> newsElement = new HashMap<>();
                 newsElement.put("headline", headline);
                 newsElement.put("author", author);
                 newsElement.put("time", time);
                 newsElement.put("section", section);
+                newsElement.put("description", description);
 
                 newsList.add(newsElement);
             }
