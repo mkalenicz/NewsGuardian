@@ -11,20 +11,23 @@
         android:paddingBottom="5dp"
         android:textColor="#1551c3"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:text="section"/>
 
     <TextView
         android:id="@+id/headline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="5dp"
-        android:textColor="#5d5d5d" />
+        android:textColor="#5d5d5d"
+        android:text="headline"/>
 
     <TextView
         android:id="@+id/author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="5dp"
-        android:textColor="#5d5d5d" />
+        android:textColor="#5d5d5d"
+        android:text="author"/>
 
 </LinearLayout>

@@ -1,11 +1,18 @@
 package com.kalenicz.maciej.newsguardian;
 
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,57 +26,71 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String API_URL = "http://content.guardianapis.com/search?";
     public static final String API_SHOW_BYLINE = "show-fields=byline";
     public static final String API_KEY = "test";
+//    private RecyclerView.Adapter adapter;
+//    private RecyclerView recyclerView;
+//    private RecyclerView.LayoutManager layoutManager;
+
+    ArrayList<HashMap<String, String>> newsList;
+    ListView listView;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        listView = findViewById(R.id.list_view);
+
+        newsList = new ArrayList<>();
+
         NewsAsyncTask task = new NewsAsyncTask();
         task.execute();
     }
 
-    private void updateUi(News news) {
-        TextView section = findViewById(R.id.section);
-        section.setText(news.getSection());
 
-        TextView title = findViewById(R.id.title);
-        title.setText(news.getHeadline());
-
-        TextView time = findViewById(R.id.time);
-        time.setText(news.getTimePublished());
-
-        TextView author = findViewById(R.id.author);
-        author.setText(news.getAuthor());
-    }
-
-    private class NewsAsyncTask extends AsyncTask<URL, Void, News> {
+    private class NewsAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
-        protected News doInBackground(URL... urls) {
-            URL url = createUrl(API_URL + API_SHOW_BYLINE+"&api-key=" + API_KEY);
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Toast.makeText(MainActivity.this,"Json Data is downloading",Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            URL url = createUrl(API_URL + API_SHOW_BYLINE + "&api-key=" + API_KEY);
             String jsonResponse = "";
             try {
                 jsonResponse = makeHttpRequest(url);
             } catch (IOException e) {
                 // TODO Handle the IOException
             }
-            News news = extractFromJson(jsonResponse);
-            return news;
+            News newsList = extractFromJson(jsonResponse);
+            return null;
         }
 
         @Override
-        protected void onPostExecute(News news) {
-            if (news == null) {
-                return;
-            }
+        protected void onPostExecute(Void result) {
+            ListAdapter adapter = new SimpleAdapter(MainActivity.this, newsList,
+                    R.layout.list_item, new String[]{ "headline","author", "section"},
+                    new int[]{R.id.headline, R.id.author, R.id.section});
+            listView.setAdapter(adapter);
 
-            updateUi(news);
+
+//            recyclerView = (RecyclerView) findViewById(R.id.list_recycler_view);
+//            layoutManager = new LinearLayoutManager(context);
+//            recyclerView.setLayoutManager(layoutManager);
+//            adapter = new NewsAdapter(newsList);
+//            recyclerView.setAdapter(adapter);
+
         }
     }
 
@@ -83,8 +104,11 @@ public class MainActivity extends AppCompatActivity {
             urlConnection.setReadTimeout(10000 /* milliseconds */);
             urlConnection.setConnectTimeout(15000 /* milliseconds */);
             urlConnection.connect();
-            inputStream = urlConnection.getInputStream();
-            jsonResponse = readFromStream(inputStream);
+
+            if (urlConnection.getResponseCode() == 200) {
+                inputStream = urlConnection.getInputStream();
+                jsonResponse = readFromStream(inputStream);
+            }
         } catch (IOException e) {
             // TODO: Handle the exception
         } finally {
@@ -125,27 +149,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private News extractFromJson(String newsJSON) {
+
         try {
             JSONObject baseJsonResponse = new JSONObject(newsJSON);
             JSONObject newsObject = baseJsonResponse.getJSONObject("response");
             JSONArray resultsArray = newsObject.getJSONArray("results");
 
             // If there are results in the features array
-            if (resultsArray.length() > 0) {
+            for (int i = 0; i < resultsArray.length(); i++){
                 // Extract out the first feature (which is an earthquake)
-                JSONObject currentNews = resultsArray.getJSONObject(0);
+                JSONObject currentNews = resultsArray.getJSONObject(i);
                 String section = currentNews.getString("sectionName");
                 String headline = currentNews.getString("webTitle");
                 String time = currentNews.getString("webPublicationDate");
 
                 String author;
-                if(currentNews.getJSONObject("fields").has("byline")){
+                if (currentNews.getJSONObject("fields").has("byline")) {
                     author = "by " + currentNews.getJSONObject("fields").getString("byline");
                 } else {
                     author = "no author";
                 }
+                HashMap<String, String> newsElement = new HashMap<>();
+                newsElement.put("headline", headline);
+                newsElement.put("author", author);
+                newsElement.put("time", time);
+                newsElement.put("section", section);
 
-                return new News(headline, author, time, "test", "test", section);
+                newsList.add(newsElement);
             }
         } catch (JSONException e) {
             Log.e("Error LOG", "Problem parsing the JSON results", e);
