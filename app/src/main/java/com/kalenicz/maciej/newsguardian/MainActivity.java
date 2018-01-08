@@ -8,10 +8,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -28,26 +24,23 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String API_URL = "http://content.guardianapis.com/search?";
     public static final String API_SHOW_BYLINE = "show-fields=byline";
     public static final String API_KEY = "test";
-//    private RecyclerView.Adapter adapter;
-//    private RecyclerView recyclerView;
-//    private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView.Adapter adapter;
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
 
     ArrayList<HashMap<String, String>> newsList;
-    ListView listView;
     Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        listView = findViewById(R.id.list_view);
 
         newsList = new ArrayList<>();
 
@@ -55,13 +48,12 @@ public class MainActivity extends AppCompatActivity {
         task.execute();
     }
 
-
     private class NewsAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(MainActivity.this,"Json Data is downloading",Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Json Data is downloading", Toast.LENGTH_LONG).show();
         }
 
         @Override
@@ -73,24 +65,17 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e) {
                 // TODO Handle the IOException
             }
-            News newsList = extractFromJson(jsonResponse);
+            extractFromJson(jsonResponse);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
-            ListAdapter adapter = new SimpleAdapter(MainActivity.this, newsList,
-                    R.layout.list_item, new String[]{ "headline","author", "section"},
-                    new int[]{R.id.headline, R.id.author, R.id.section});
-            listView.setAdapter(adapter);
-
-
-//            recyclerView = (RecyclerView) findViewById(R.id.list_recycler_view);
-//            layoutManager = new LinearLayoutManager(context);
-//            recyclerView.setLayoutManager(layoutManager);
-//            adapter = new NewsAdapter(newsList);
-//            recyclerView.setAdapter(adapter);
-
+            recyclerView = findViewById(R.id.list_recycler_view);
+            layoutManager = new LinearLayoutManager(context);
+            recyclerView.setLayoutManager(layoutManager);
+            adapter = new NewsAdapter(newsList);
+            recyclerView.setAdapter(adapter);
         }
     }
 
@@ -155,9 +140,8 @@ public class MainActivity extends AppCompatActivity {
             JSONObject newsObject = baseJsonResponse.getJSONObject("response");
             JSONArray resultsArray = newsObject.getJSONArray("results");
 
-            // If there are results in the features array
-            for (int i = 0; i < resultsArray.length(); i++){
-                // Extract out the first feature (which is an earthquake)
+            for (int i = 0; i < resultsArray.length(); i++) {
+
                 JSONObject currentNews = resultsArray.getJSONObject(i);
                 String section = currentNews.getString("sectionName");
                 String headline = currentNews.getString("webTitle");

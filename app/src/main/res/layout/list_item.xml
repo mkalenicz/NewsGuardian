@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/section"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="5dp"
+        android:text="section"
         android:textColor="#1551c3"
         android:textSize="20sp"
-        android:textStyle="bold"
-        android:text="section"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/headline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="5dp"
-        android:textColor="#5d5d5d"
-        android:text="headline"/>
+        android:text="headline"
+        android:textColor="#5d5d5d" />
 
     <TextView
         android:id="@+id/author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="5dp"
-        android:textColor="#5d5d5d"
-        android:text="author"/>
+        android:text="author"
+        android:textColor="#5d5d5d" />
 
 </LinearLayout>
