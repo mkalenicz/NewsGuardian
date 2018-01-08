@@ -36,6 +36,7 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
         holder.section.setText(newsModel.get("section"));
         holder.author.setText(newsModel.get("author"));
         holder.description.setText(newsModel.get("description"));
+        holder.date.setText(newsModel.get("time"));
     }
 
     @Override
@@ -49,6 +50,7 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
         final TextView author;
         final TextView section;
         final TextView description;
+        final TextView date;
 
         NewsViewHolder(View listItem) {
             super(listItem);
@@ -56,6 +58,7 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
             author = listItem.findViewById(R.id.author);
             section = listItem.findViewById(R.id.section);
             description = listItem.findViewById(R.id.description);
+            date = listItem.findViewById(R.id.date);
         }
     }
 }

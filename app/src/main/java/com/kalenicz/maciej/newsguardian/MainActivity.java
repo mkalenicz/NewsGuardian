@@ -22,7 +22,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
@@ -146,7 +149,23 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject currentNews = resultsArray.getJSONObject(i);
                 String section = currentNews.getString("sectionName");
                 String headline = currentNews.getString("webTitle");
-                String time = currentNews.getString("webPublicationDate");
+                String time ;
+                String rawTime;
+                if(currentNews.has("webPublicationDate")) {
+                    rawTime = currentNews.getString("webPublicationDate"); // format in the JSON response
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"); // convert the String into Date
+                    try {
+                    Date date = format.parse(rawTime);
+                    time = (String) android.text.format.DateFormat.format("MMM" + " " + "dd" + ", " + "HH:mm", date); // format the date and cast it to String again
+                    } catch (ParseException exc) {
+                        Log.e("Error:", "An exception was encountered while trying to parse a date " + exc);
+                        time= "";
+                    }
+
+                } else {
+                    time= "";
+                }
+
                 String description = currentNews.getJSONObject("fields").getString("trailText");
                 String author;
                 if (currentNews.getJSONObject("fields").has("byline")) {
