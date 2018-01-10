@@ -2,14 +2,15 @@ package com.kalenicz.maciej.newsguardian;
 
 import android.app.LoaderManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.Loader;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,7 +22,6 @@ import static com.kalenicz.maciej.newsguardian.NewsLoader.API_URL;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<HashMap<String, String>>> {
 
-    private static final String TAG = "MainActivity";
     private RecyclerView.Adapter adapter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
@@ -81,12 +81,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 new RecyclerItemClickListener(context, recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Log.v(TAG, "onItemClick, position: " + position);
+                        String url;
+                        HashMap<String, String> newsModel = newsList.get(position);
+                        url = newsModel.get("webUrl");
+                        openWebPage(url);
                     }
 
                     @Override
                     public void onLongItemClick(View view, int position) {
-                        Log.v(TAG, "onLongItemClick, position: " + position);
+                        String url;
+                        HashMap<String, String> newsModel = newsList.get(position);
+                        url = newsModel.get("webUrl");
+                        openWebPage(url);
                     }
 
                 })
@@ -122,6 +128,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoaderReset(Loader<ArrayList<HashMap<String, String>>> loader) {
         loader.reset();
+    }
+
+    public void openWebPage(String url) {
+        Uri webpage = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 }
 

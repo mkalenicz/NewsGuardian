@@ -143,6 +143,7 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<HashMap<String, String
                 JSONObject currentNews = resultsArray.getJSONObject(i);
                 String section = currentNews.getString("sectionName");
                 String headline = currentNews.getString("webTitle");
+                String webUrl = currentNews.getString("webUrl");
                 String time;
                 String rawTime;
                 if (currentNews.has("webPublicationDate")) {
@@ -174,6 +175,7 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<HashMap<String, String
                 newsElement.put("time", time);
                 newsElement.put("section", section);
                 newsElement.put("description", description);
+                newsElement.put("webUrl", webUrl);
 
                 newsList.add(newsElement);
             }
