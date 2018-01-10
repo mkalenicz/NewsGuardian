@@ -26,9 +26,10 @@ import java.util.HashMap;
 
 public class NewsLoader extends AsyncTaskLoader<ArrayList<HashMap<String, String>>> {
     public static final String API_URL = "http://content.guardianapis.com/search?show-fields=byline,trailText&api-key=test";
-
+    public boolean serverResponse;
     ArrayList<HashMap<String, String>> newsList;
     HashMap<String, String> newsElement;
+
 
     private String mUrl;
 
@@ -72,14 +73,15 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<HashMap<String, String
             urlConnection.connect();
 
             if (urlConnection.getResponseCode() == 200) {
+                serverResponse = true;
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
-            }
-            else {
+            } else {
+                serverResponse = false;
                 Log.e("NewsLoader", "Error response code" + urlConnection.getResponseCode());
             }
         } catch (IOException e) {
-           Log.e("NewLoader", "Problem retrieving JSON results.", e);
+            Log.e("NewLoader", "Problem retrieving JSON results.", e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
