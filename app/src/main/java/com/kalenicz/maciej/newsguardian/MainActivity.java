@@ -26,9 +26,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        recyclerView = findViewById(R.id.list_recycler_view);
+        layoutManager = new LinearLayoutManager(context);
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new NewsAdapter(new ArrayList<HashMap<String, String>>());
+        recyclerView.setAdapter(adapter);
 
         LoaderManager loaderManager = getLoaderManager();
         loaderManager.initLoader(1, null, this);
+
     }
 
     @Override
@@ -39,9 +45,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<ArrayList<HashMap<String, String>>> loader, ArrayList<HashMap<String, String>> data) {
         newsList = data;
-        recyclerView = findViewById(R.id.list_recycler_view);
-        layoutManager = new LinearLayoutManager(context);
-        recyclerView.setLayoutManager(layoutManager);
+
         adapter = new NewsAdapter(newsList);
         recyclerView.setAdapter(adapter);
     }
