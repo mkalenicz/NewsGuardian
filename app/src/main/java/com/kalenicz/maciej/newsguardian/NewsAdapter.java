@@ -61,5 +61,6 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
             date = listItem.findViewById(R.id.date);
         }
     }
+
 }
 

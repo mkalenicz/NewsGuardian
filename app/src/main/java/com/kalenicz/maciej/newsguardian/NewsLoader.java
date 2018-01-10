@@ -3,6 +3,7 @@ package com.kalenicz.maciej.newsguardian;
 import android.content.AsyncTaskLoader;
 import android.content.Context;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -74,8 +75,11 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<HashMap<String, String
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
             }
+            else {
+                Log.e("NewsLoader", "Error response code" + urlConnection.getResponseCode());
+            }
         } catch (IOException e) {
-            // TODO: Handle the exception
+           Log.e("NewLoader", "Problem retrieving JSON results.", e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -114,7 +118,18 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<HashMap<String, String
     }
 
     private ArrayList<HashMap<String, String>> extractFromJson(String newsJSON) {
+
+//        code snipped for simulating slow network response time - test loading spinner on the screen
+//        try {
+//            Thread.sleep(2000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
         newsList = new ArrayList<>();
+        if (TextUtils.isEmpty(newsJSON)) {
+            return null;
+        }
         try {
             JSONObject baseJsonResponse = new JSONObject(newsJSON);
             JSONObject newsObject = baseJsonResponse.getJSONObject("response");
