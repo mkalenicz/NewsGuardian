@@ -1,64 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/headline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="headline"
+        android:paddingLeft="8dp"
+        android:paddingTop="8dp"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:paddingLeft="8dp"
-        android:paddingTop="8dp"/>
+        tools:text="headline" />
 
     <TextView
         android:id="@+id/author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="author"
+        android:paddingLeft="8dp"
         android:textColor="@color/secondaryText"
-        android:paddingLeft="8dp"/>
+        tools:text="author" />
 
     <TextView
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="description"
+        android:padding="8dp"
         android:textColor="@color/primaryText"
-        android:padding="8dp"/>
+        tools:text="description" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TextView
             android:id="@+id/section"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="section"
-            android:textColor="@android:color/white"
-            android:background="@drawable/rectangle"
-            android:textStyle="bold"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="8dp"
             android:layout_centerInParent="true"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
-            android:padding="8dp"/>
+            android:background="@drawable/rectangle"
+            android:padding="8dp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            tools:text="section" />
+
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:padding="8dp"
             android:paddingBottom="5dp"
-            tools:text="date"
             android:textColor="@color/secondaryText"
             android:textStyle="italic"
-            android:layout_alignParentRight="true"
-            android:padding="8dp"
-            android:layout_centerInParent="true"/>
+            tools:text="date" />
 
     </RelativeLayout>
 

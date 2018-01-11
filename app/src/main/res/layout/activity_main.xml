@@ -6,7 +6,6 @@
     android:orientation="vertical"
     tools:context="com.kalenicz.maciej.newsguardian.MainActivity">
 
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list_recycler_view"
         android:layout_width="match_parent"
@@ -18,22 +17,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textAppearance="?android:textAppearanceMedium"/>
+        android:textAppearance="?android:textAppearanceMedium" />
+
     <TextView
         android:id="@+id/no_data_news"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:textAppearance="?android:textAppearanceMedium"/>
+        android:textAppearance="?android:textAppearanceMedium" />
 
     <ImageView
         android:id="@+id/no_data_news_img"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_centerInParent="true"
         android:layout_above="@id/no_data_news"
-        android:tint="@color/colorPrimaryLight"/>
+        android:layout_centerInParent="true"
+        android:tint="@color/colorPrimaryLight" />
 
     <ImageView
         android:id="@+id/empty_view_img"
@@ -41,8 +41,8 @@
         android:layout_height="48dp"
         android:layout_above="@id/empty_view"
         android:layout_centerInParent="true"
-        tools:src="@drawable/ic_cloud_off_black_24dp"
-        android:tint="@color/colorPrimaryLight"/>
+        android:tint="@color/colorPrimaryLight"
+        tools:src="@drawable/ic_cloud_off_black_24dp" />
 
     <TextView
         android:id="@+id/empty_view2"
@@ -52,13 +52,13 @@
         android:layout_centerInParent="true"
         android:gravity="center"
         android:paddingTop="8dp"
-        android:textAppearance="?android:textAppearanceSmall"/>
+        android:textAppearance="?android:textAppearanceSmall" />
 
     <ProgressBar
         android:id="@+id/loading_indicator"
         style="@style/Widget.AppCompat.ProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true" />
 
 </RelativeLayout>
