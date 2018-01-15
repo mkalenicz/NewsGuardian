@@ -27,8 +27,8 @@ import java.util.HashMap;
 public class NewsLoader extends AsyncTaskLoader<ArrayList<HashMap<String, String>>> {
     public static final String API_URL = "http://content.guardianapis.com/search?show-fields=byline,trailText&api-key=test";
     public boolean serverResponse;
-    ArrayList<HashMap<String, String>> newsList;
-    HashMap<String, String> newsElement;
+    private ArrayList<HashMap<String, String>> newsList;
+    private HashMap<String, String> newsElement;
 
 
     private String mUrl;
@@ -55,7 +55,7 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<HashMap<String, String
         try {
             jsonResponse = makeHttpRequest(url);
         } catch (IOException e) {
-            // TODO Handle the IOException
+            Log.e("NewLoader", "Problem with loadInBackground method", e);
         }
         extractFromJson(jsonResponse);
         return newsList;

@@ -32,7 +32,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     Context context;
     private SwipeRefreshLayout swipeContainer;
     LoaderManager loaderManager;
-
+    TextView emptyStateTextView;
+    ImageView emptyStateImageView;
+    TextView emptyStateTextView2;
+    ConnectivityManager connMgr;
+    NetworkInfo networkInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,18 +48,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         recyclerView.setLayoutManager(layoutManager);
         adapter = new NewsAdapter(new ArrayList<HashMap<String, String>>());
         recyclerView.setAdapter(adapter);
-        TextView emptyStateTextView = findViewById(R.id.empty_view);
-        ImageView emptyStateImageView = findViewById(R.id.empty_view_img);
-        TextView emptyStateTextView2 = findViewById(R.id.empty_view2);
+        emptyStateTextView = findViewById(R.id.empty_view);
+        emptyStateImageView = findViewById(R.id.empty_view_img);
+        emptyStateTextView2 = findViewById(R.id.empty_view2);
         noDataTextView = findViewById(R.id.no_data_news);
         noDataImageView = findViewById(R.id.no_data_news_img);
 
 
         // Get a reference to the ConnectivityManager to check state of network connectivity
-        ConnectivityManager connMgr = (ConnectivityManager)
+        connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         // Get details on the currently active default data network
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        networkInfo = connMgr.getActiveNetworkInfo();
 
         // If there is a network connection, fetch data
         if (networkInfo != null && networkInfo.isConnected()) {
@@ -108,23 +112,65 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Your code to refresh the list here.
-                // Make sure you call swipeContainer.setRefreshing(false)
-                // once the network request has completed successfully.
 
+                connMgr = (ConnectivityManager)
+                        getSystemService(Context.CONNECTIVITY_SERVICE);
 
-                loaderManager.restartLoader(1, null, MainActivity.this);
+                // Get details on the currently active default data network
+                networkInfo = connMgr.getActiveNetworkInfo();
+
+                if (loaderManager != null) {
+                    loaderManager.restartLoader(1, null, MainActivity.this);
+
+                    if (networkInfo != null && networkInfo.isConnected()) {
+                        hideNoInternet();
+
+                        if (newsList == null) {
+                            NewsLoader newsloader = new NewsLoader(MainActivity.this, API_URL);
+                            if (newsloader.serverResponse == false && networkInfo != null && networkInfo.isConnected()) {
+                                noDataTextView.setText(R.string.no_data_text);
+                                noDataImageView.setImageResource(R.drawable.ic_cloud_computing_2);
+                                noDataTextView.setVisibility(View.VISIBLE);
+                                noDataImageView.setVisibility(View.VISIBLE);
+                            }
+                        } else {
+                            noDataTextView.setVisibility(View.INVISIBLE);
+                            noDataImageView.setVisibility(View.INVISIBLE);
+                        }
+
+                    } else {
+                        showNoInternet();
+                    }
+                } else {
+                    loaderManager = getLoaderManager();
+                    loaderManager.initLoader(1, null, MainActivity.this);
+                    if (networkInfo != null && networkInfo.isConnected()) {
+                        hideNoInternet();
+                    } else {
+                        showNoInternet();
+                    }
+                }
                 swipeContainer.setRefreshing(false);
-
-
-//                fetchTimelineAsync(0);
             }
         });
+
         // Configure the refreshing colors
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+    }
+
+    private void showNoInternet() {
+        emptyStateTextView.setVisibility(View.VISIBLE);
+        emptyStateTextView2.setVisibility(View.VISIBLE);
+        emptyStateImageView.setVisibility(View.VISIBLE);
+    }
+
+    private void hideNoInternet() {
+        emptyStateTextView.setVisibility(View.INVISIBLE);
+        emptyStateTextView2.setVisibility(View.INVISIBLE);
+        emptyStateImageView.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -144,12 +190,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         adapter = new NewsAdapter(newsList);
         recyclerView.setAdapter(adapter);
-        if (((NewsLoader) loader).serverResponse == false) {
+        if (!((NewsLoader) loader).serverResponse & networkInfo != null && networkInfo.isConnected()) {
             noDataTextView.setText(R.string.no_data_text);
             noDataImageView.setImageResource(R.drawable.ic_cloud_computing_2);
+
+            hideNoInternet();
+
         } else {
-            noDataTextView.setVisibility(View.GONE);
-            noDataImageView.setVisibility(View.GONE);
+            noDataTextView.setVisibility(View.INVISIBLE);
+            noDataImageView.setVisibility(View.INVISIBLE);
         }
     }
 
