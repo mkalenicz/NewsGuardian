@@ -24,8 +24,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+import static com.kalenicz.maciej.newsguardian.BuildConfig.NEWS_GUARDIAN_API_KEY;
+
 public class NewsLoader extends AsyncTaskLoader<ArrayList<HashMap<String, String>>> {
-    public static final String API_URL = "http://content.guardianapis.com/search?show-fields=byline,trailText&api-key=test";
+    public static final String API_URL = "http://content.guardianapis.com/search?show-fields=byline,trailText&api-key=" + NEWS_GUARDIAN_API_KEY;
+    public static final int SUCCESS_CODE = 200;
     public boolean serverResponse;
     private ArrayList<HashMap<String, String>> newsList;
     private HashMap<String, String> newsElement;
@@ -72,7 +75,7 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<HashMap<String, String
             urlConnection.setConnectTimeout(15000 /* milliseconds */);
             urlConnection.connect();
 
-            if (urlConnection.getResponseCode() == 200) {
+            if (urlConnection.getResponseCode() == SUCCESS_CODE) {
                 serverResponse = true;
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
