@@ -4,24 +4,32 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.kalenicz.maciej.newsguardian.NewsLoader.API_URL;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<HashMap<String, String>>> {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<HashMap<String, String>>>, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private RecyclerView.Adapter adapter;
     private RecyclerView recyclerView;
@@ -37,12 +45,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     TextView emptyStateTextView2;
     ConnectivityManager connMgr;
     NetworkInfo networkInfo;
+    Uri.Builder uriBuilder;
+    public static String URI_URL;
+    private String mKeyText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mKeyText = getText(R.string.settings_select_sections_key).toString();
         recyclerView = findViewById(R.id.list_recycler_view);
         layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(layoutManager);
@@ -161,6 +173,39 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 android.R.color.holo_red_light);
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        final SharedPreferences prefs = getPrefs();
+        final Set<String> values =
+                prefs.getStringSet(mKeyText, null);
+
+        if (values == null)
+            return;
+    }
+
+    private SharedPreferences getPrefs() {
+        return PreferenceManager.getDefaultSharedPreferences(this);
+    }
+
+    @Override
+    // This method initialize the contents of the Activity's options menu.
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the Options Menu we specified in XML
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void showNoInternet() {
         emptyStateTextView.setVisibility(View.VISIBLE);
         emptyStateTextView2.setVisibility(View.VISIBLE);
@@ -175,7 +220,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public Loader<ArrayList<HashMap<String, String>>> onCreateLoader(int id, Bundle bundle) {
-        return new NewsLoader(this, API_URL);
+        uriSharedPrefs();
+        return new NewsLoader(this, uriBuilder.toString());
+    }
+
+    private void uriSharedPrefs() {
+        final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        Set<String> values = sharedPrefs.getStringSet(getString(R.string.settings_select_sections_key), getDefaultValues());
+        String selectSections = values.toString();
+
+        Uri baseUri = Uri.parse(API_URL);
+        uriBuilder = baseUri.buildUpon();
+        uriBuilder.appendQueryParameter("section", selectSections);
+        URI_URL = uriBuilder.toString();
+        Log.i("MainActivity", "query: " + URI_URL);
     }
 
     @Override
@@ -214,6 +273,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             startActivity(intent);
         }
     }
+
+    private Set<String> getDefaultValues() {
+        final Set<String> defValues = new HashSet<String>();
+        defValues.addAll(Arrays.asList(
+                getResources().getStringArray(
+                        R.array.settings_select_sections_defvalues)));
+        return defValues;
+    }
+
 }
 
 

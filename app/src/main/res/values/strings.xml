@@ -3,4 +3,48 @@
     <string name="no_internet_connection">No internet connection.</string>
     <string name="no_internet_description">Your network is unavailable. Check your data or \n Wi-Fi connection.</string>
     <string name="no_data_text">No Data Available. \nServer doesn\'t respond</string>
+    <string name="settings_menu_item">Settings</string>
+    <string name="settings_title">News Guardian Settings</string>
+
+    <string name="settings_min_magnitude_label">Minimum Magnitude</string>
+    <string name="settings_min_magnitude_key" translatable="false">min_magnitude</string>
+    <string name="settings_min_magnitude_default" translatable="false">0</string>
+
+    <!-- Strings For Order-By Preference -->
+    <string name="settings_order_by_label">Order By</string>
+    <string name="settings_order_by_key" translatable="false">order_by</string>
+    <string name="settings_order_by_default" translatable="false">@string/settings_order_by_newest_value</string>
+
+    <!-- Strings For Select_Sections Preference -->
+    <string name="settings_select_sections_label">Select News Sections</string>
+    <string name="settings_select_sections_key" translatable="false">select_sections</string>
+    <string name="settings_select_sections_default" translatable="false">@string/settings_select_sections_business_value</string>
+
+    <string name="settings_order_by_newest_label">Newest</string>
+    <string name="settings_order_by_newest_value" translatable="false">newest</string>
+
+    <string name="settings_order_by_oldest_label">Oldest</string>
+    <string name="settings_order_by_oldest_value" translatable="false">oldest</string>
+
+    <string name="settings_select_sections_business_label">Business</string>
+    <string name="settings_select_sections_business_value" translatable="false">business</string>
+
+    <string name="settings_select_sections_sport_label">Sport</string>
+    <string name="settings_select_sections_sport_value" translatable="false">sport</string>
+
+    <string name="settings_select_sections_books_label">Books</string>
+    <string name="settings_select_sections_books_value" translatable="false">books</string>
+
+    <string name="settings_select_sections_culture_label">Culture</string>
+    <string name="settings_select_sections_culture_value" translatable="false">culture</string>
+
+    <string name="settings_select_sections_education_label">Education</string>
+    <string name="settings_select_sections_education_value" translatable="false">education</string>
+
+    <string name="settings_select_sections_environment_label">Environment</string>
+    <string name="settings_select_sections_environment_value" translatable="false">environment</string>
+
+    <string name="settings_select_sections_football_label">Football</string>
+    <string name="settings_select_sections_football_value" translatable="false">football</string>
+
 </resources>

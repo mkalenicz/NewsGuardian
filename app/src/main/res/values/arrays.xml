@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="settings_order_by_labels">
+        <item>@string/settings_order_by_newest_label</item>
+        <item>@string/settings_order_by_oldest_label</item>
+    </string-array>
+
+    <string-array name="settings_order_by_values">
+        <item>@string/settings_order_by_newest_value</item>
+        <item>@string/settings_order_by_oldest_value</item>
+    </string-array>
+
+    <string-array name="settings_select_sections_labels">
+        <item>@string/settings_select_sections_business_label</item>
+        <item>@string/settings_select_sections_sport_label</item>
+        <item>@string/settings_select_sections_books_label</item>
+        <item>@string/settings_select_sections_culture_label</item>
+        <item>@string/settings_select_sections_education_label</item>
+        <item>@string/settings_select_sections_environment_label</item>
+        <item>@string/settings_select_sections_football_label</item>
+    </string-array>
+
+    <string-array name="settings_select_sections_values">
+        <item>@string/settings_select_sections_business_value</item>
+        <item>@string/settings_select_sections_sport_value</item>
+        <item>@string/settings_select_sections_books_value</item>
+        <item>@string/settings_select_sections_culture_value</item>
+        <item>@string/settings_select_sections_education_value</item>
+        <item>@string/settings_select_sections_environment_value</item>
+        <item>@string/settings_select_sections_football_value</item>
+    </string-array>
+
+    <string-array name="settings_select_sections_defvalues">
+        <item>@string/settings_select_sections_business_value</item>
+        <item>@string/settings_select_sections_sport_value</item>
+        <item>@string/settings_select_sections_environment_value</item>
+    </string-array>
+
+    <string-array name="empty_array"></string-array>
+
+</resources>

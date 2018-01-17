@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import static com.kalenicz.maciej.newsguardian.BuildConfig.NEWS_GUARDIAN_API_KEY;
+import static com.kalenicz.maciej.newsguardian.MainActivity.URI_URL;
 
 public class NewsLoader extends AsyncTaskLoader<ArrayList<HashMap<String, String>>> {
     public static final String API_URL = "http://content.guardianapis.com/search?show-fields=byline,trailText&api-key=" + NEWS_GUARDIAN_API_KEY;
@@ -33,9 +34,7 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<HashMap<String, String
     private ArrayList<HashMap<String, String>> newsList;
     private HashMap<String, String> newsElement;
 
-
     private String mUrl;
-
 
     public NewsLoader(Context context, String url) {
         super(context);
@@ -53,7 +52,8 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<HashMap<String, String
         if (mUrl == null) {
             return null;
         }
-        URL url = createUrl(API_URL);
+        URL url = createUrl(URI_URL);
+//        URL url = createUrl();
         String jsonResponse = "";
         try {
             jsonResponse = makeHttpRequest(url);
