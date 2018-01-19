@@ -21,6 +21,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -221,18 +223,35 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public Loader<ArrayList<HashMap<String, String>>> onCreateLoader(int id, Bundle bundle) {
         uriSharedPrefs();
-        return new NewsLoader(this, uriBuilder.toString());
+        return new NewsLoader(this, URI_URL);
     }
 
     private void uriSharedPrefs() {
         final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         Set<String> values = sharedPrefs.getStringSet(getString(R.string.settings_select_sections_key), getDefaultValues());
-        String selectSections = values.toString();
+        String selectSections = values.toString()
+                .replace(",", "")  //remove the commas
+                .replace(" ", ",")  //add the commas
+                .replace("[", "")  //remove the right bracket
+                .replace("]", "")  //remove the left bracket
+                .trim();           //remove trailing spaces from partially initialized arrays
+        String uriDecode = null;
 
+        Log.i("MainActivity", "values: " + selectSections);
         Uri baseUri = Uri.parse(API_URL);
         uriBuilder = baseUri.buildUpon();
-        uriBuilder.appendQueryParameter("section", selectSections);
+
+        try {
+            String decodedUrl = URLDecoder.decode(selectSections, "UTF-8");
+
+            uriDecode = decodedUrl;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        Log.i("MainActivity", "values after decoding: " + uriDecode);
+        uriBuilder.appendQueryParameter("sections", uriDecode);
         URI_URL = uriBuilder.toString();
         Log.i("MainActivity", "query: " + URI_URL);
     }

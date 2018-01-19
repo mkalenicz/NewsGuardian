@@ -53,6 +53,7 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<HashMap<String, String
             return null;
         }
         URL url = createUrl(URI_URL);
+        Log.i("NewsLoader","URI_URL is: " +URI_URL);
 //        URL url = createUrl();
         String jsonResponse = "";
         try {
