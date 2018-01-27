@@ -29,10 +29,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.kalenicz.maciej.newsguardian.BuildConfig.NEWS_GUARDIAN_API_KEY;
 import static com.kalenicz.maciej.newsguardian.NewsLoader.API_URL;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<HashMap<String, String>>>, SharedPreferences.OnSharedPreferenceChangeListener {
 
+    public static final String SECTIONS_URL = "http://content.guardianapis.com/sections";
     private RecyclerView.Adapter adapter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
@@ -237,9 +239,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 .replace("]", "")  //remove the left bracket
                 .trim();           //remove trailing spaces from partially initialized arrays
         String uriDecode = null;
-
-        Log.i("MainActivity", "values: " + selectSections);
-        Uri baseUri = Uri.parse(API_URL);
+        Uri baseUri = Uri.parse(SECTIONS_URL);
         uriBuilder = baseUri.buildUpon();
 
         try {
@@ -250,10 +250,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             e.printStackTrace();
         }
 
-        Log.i("MainActivity", "values after decoding: " + uriDecode);
-        uriBuilder.appendQueryParameter("sections", uriDecode);
-        URI_URL = uriBuilder.toString();
-        Log.i("MainActivity", "query: " + URI_URL);
+        uriBuilder.appendQueryParameter("q", uriDecode);
+        URI_URL = uriBuilder.toString() + "&api-key=" + NEWS_GUARDIAN_API_KEY;
     }
 
     @Override

@@ -125,13 +125,6 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<HashMap<String, String
 
     private ArrayList<HashMap<String, String>> extractFromJson(String newsJSON) {
 
-//        code snipped for simulating slow network response time - test loading spinner on the screen
-//        try {
-//            Thread.sleep(2000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
         newsList = new ArrayList<>();
         if (TextUtils.isEmpty(newsJSON)) {
             return null;

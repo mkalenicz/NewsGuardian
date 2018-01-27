@@ -17,6 +17,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     public static class NewsPreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
         private String mKeyText;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -34,8 +35,6 @@ public class SettingsActivity extends AppCompatActivity {
 
             final String key = preference.getKey();
             if (key.equals(mKeyText)) {
-
-                Log.i ("MainPreferenceActivity", "onPreferenceChange" + mKeyText);
                 return true;
             } else {
                 return false;
